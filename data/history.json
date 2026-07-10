@@ -1,1 +1,20 @@
-{}
+{
+  "lexicon-dj-essential-lifetime": [
+    {
+      "date": "2026-07-09",
+      "prices": [
+        {"source": "Lexicon DJ (official)", "price": 199.00, "url": "https://www.lexicondj.com/pricing"}
+      ],
+      "deals": []
+    }
+  ],
+  "lexicon-dj-ultimate-lifetime": [
+    {
+      "date": "2026-07-09",
+      "prices": [
+        {"source": "Lexicon DJ (official)", "price": 399.00, "url": "https://www.lexicondj.com/pricing"}
+      ],
+      "deals": []
+    }
+  ]
+}

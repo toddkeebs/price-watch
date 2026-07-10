@@ -1,4 +1,29 @@
 {
   "updated": "2026-07-09",
-  "items": []
+  "items": [
+    {
+      "id": "lexicon-dj-essential-lifetime",
+      "name": "Lexicon DJ — Essential (Lifetime)",
+      "group": "Software",
+      "targetPrice": null,
+      "image": "https://www.lexicondj.com/icon-512x512.png",
+      "sites": [
+        {"name": "Lexicon DJ (official)", "url": "https://www.lexicondj.com/pricing"}
+      ],
+      "notes": "Lifetime license. List $199. Watch for seasonal sales (e.g. Black Friday, New Year promos).",
+      "added": "2026-07-09"
+    },
+    {
+      "id": "lexicon-dj-ultimate-lifetime",
+      "name": "Lexicon DJ — Ultimate (Lifetime)",
+      "group": "Software",
+      "targetPrice": null,
+      "image": "https://www.lexicondj.com/icon-512x512.png",
+      "sites": [
+        {"name": "Lexicon DJ (official)", "url": "https://www.lexicondj.com/pricing"}
+      ],
+      "notes": "Lifetime license. List $399. Unlimited cloud storage is a separate monthly add-on (no lifetime option).",
+      "added": "2026-07-09"
+    }
+  ]
 }
