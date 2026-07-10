@@ -54,19 +54,34 @@
     border-radius: 18px;
     margin: 22px 0;
     overflow: hidden;
+    transition: opacity 0.15s;
   }
+  .group.dragging { opacity: 0.4; }
+  .group.drag-over { border-color: var(--accent); }
   .group-head {
-    padding: 16px 18px 4px;
-    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 14px 14px 12px 18px;
+    display: flex; align-items: center; gap: 10px;
+    cursor: grab; user-select: none;
   }
+  .group-head:active { cursor: grabbing; }
   .group-title {
     font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px;
-    color: var(--muted); font-weight: 700;
+    color: var(--muted); font-weight: 700; flex: 1;
   }
   .group-hint { font-size: 11px; color: var(--muted); }
-  .chart-wrap { padding: 8px 16px 4px; height: 280px; }
+  .gbtn {
+    background: var(--card2); border: 1px solid var(--border); color: var(--muted);
+    border-radius: 8px; width: 28px; height: 28px; font-size: 12px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .gbtn:hover { color: var(--text); border-color: #3a4152; }
+  .chev { transition: transform 0.2s; }
+  .group.collapsed .chev { transform: rotate(-90deg); }
+  .group-body { }
+  .group.collapsed .group-body { display: none; }
+  .chart-wrap { padding: 0 16px 4px; height: 280px; }
 
-  /* Oversized legend */
   .legend {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -88,15 +103,13 @@
   .lg-thumb-wrap { position: relative; flex-shrink: 0; }
   .lg-thumb {
     width: 72px; height: 72px; border-radius: 10px;
-    background: var(--bg); object-fit: contain; padding: 4px;
-    display: block;
+    background: var(--bg); object-fit: contain; padding: 4px; display: block;
   }
   .lg-thumb-ph {
     width: 72px; height: 72px; border-radius: 10px; background: var(--bg);
     display: flex; align-items: center; justify-content: center;
     font-size: 26px; color: var(--muted);
   }
-  /* color line indicator under the picture */
   .lg-line {
     position: absolute; left: 6px; right: 6px; bottom: -3px; height: 6px;
     border-radius: 3px;
@@ -125,7 +138,7 @@
   .empty h2 { color: var(--text); font-size: 18px; margin-bottom: 12px; }
   .empty p { font-size: 14px; line-height: 1.7; max-width: 460px; margin: 0 auto; }
   .empty code { background: var(--card2); padding: 2px 8px; border-radius: 6px; color: var(--amber); font-size: 13px; }
-  footer { text-align: center; color: var(--muted); font-size: 11px; margin-top: 40px; }
+  footer { text-align: center; color: var(--muted); font-size: 11px; margin-top: 40px; padding: 0 20px; }
 </style>
 </head>
 <body>
@@ -137,11 +150,19 @@
   <div id="deals"></div>
   <div id="content"></div>
 </main>
-<footer>Add items: text yourself “WATCH: item name, target $X” — picked up at the next daily check. Tap a legend card to hide/show its line.</footer>
+<footer>Add items: text yourself “WATCH: item name, target $X”. Tap a legend card to hide/show its line. Drag a section header (or use ▲▼) to rearrange; tap the chevron to collapse.</footer>
 
 <script>
 const PALETTE = ["#4f8ef7", "#e8a33d", "#34c77b", "#e5534b", "#a78bfa", "#22d3ee", "#f472b6", "#facc15"];
+const MAX_PER_CHART = 8;
 const fmt = n => n == null ? "—" : "$" + n.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+let WL = null, HIST = null, charts = [];
+
+const store = {
+  get(k, fb) { try { return JSON.parse(localStorage.getItem(k)) ?? fb; } catch { return fb; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
 
 function dailyBest(day) {
   const all = [...(day.prices || []), ...(day.deals || [])].filter(p => p.price != null);
@@ -149,84 +170,151 @@ function dailyBest(day) {
   return all.reduce((a, b) => a.price <= b.price ? a : b);
 }
 
-async function load() {
-  const bust = "?t=" + Date.now();
-  const [wl, hist] = await Promise.all([
-    fetch("data/watchlist.json" + bust).then(r => r.json()),
-    fetch("data/history.json" + bust).then(r => r.json())
-  ]);
-  document.getElementById("updated").textContent =
-    "Last updated " + (wl.updated || "never") + " · " + wl.items.length + " item" + (wl.items.length === 1 ? "" : "s") + " tracked";
-
-  if (!wl.items.length) {
-    document.getElementById("content").innerHTML = `
-      <div class="empty">
-        <h2>Nothing tracked yet</h2>
-        <p>Text yourself <code>WATCH: item name, target $X</code> in Messages,
-        or tell Claude to add an item. New items appear after the next daily price check (7am).</p>
-      </div>`;
-    return;
+function orderedSections() {
+  // Base groups in watchlist order
+  const groups = {};
+  for (const item of WL.items) {
+    const g = item.group || "Other";
+    (groups[g] = groups[g] || []).push(item);
   }
+  // Apply saved order
+  const saved = store.get("pw-group-order", []);
+  const names = Object.keys(groups);
+  names.sort((a, b) => {
+    const ia = saved.indexOf(a), ib = saved.indexOf(b);
+    if (ia === -1 && ib === -1) return 0;
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+  // Split into chunks of MAX_PER_CHART
+  const sections = [];
+  for (const g of names) {
+    const items = groups[g];
+    const nChunks = Math.ceil(items.length / MAX_PER_CHART);
+    for (let c = 0; c < nChunks; c++) {
+      sections.push({
+        group: g,
+        title: nChunks > 1 ? `${g} ${c + 1}` : g,
+        key: `${g}#${c}`,
+        items: items.slice(c * MAX_PER_CHART, (c + 1) * MAX_PER_CHART)
+      });
+    }
+  }
+  return {names, sections};
+}
 
-  // Per-item series
+function moveGroup(g, dir) {
+  const {names} = orderedSections();
+  const i = names.indexOf(g);
+  const j = i + dir;
+  if (j < 0 || j >= names.length) return;
+  [names[i], names[j]] = [names[j], names[i]];
+  store.set("pw-group-order", names);
+  render();
+}
+
+function dropGroup(dragged, target) {
+  if (dragged === target) return;
+  const {names} = orderedSections();
+  const arr = names.filter(n => n !== dragged);
+  arr.splice(arr.indexOf(target), 0, dragged);
+  store.set("pw-group-order", arr);
+  render();
+}
+
+function render() {
+  charts.forEach(c => c.destroy());
+  charts = [];
+  const content = document.getElementById("content");
+  content.innerHTML = "";
+
   const seriesOf = {};
-  for (const item of wl.items) {
-    seriesOf[item.id] = (hist[item.id] || [])
+  for (const item of WL.items) {
+    seriesOf[item.id] = (HIST[item.id] || [])
       .map(d => ({date: d.date, best: dailyBest(d)}))
       .filter(d => d.best);
   }
 
   // Deals banner
   const dealHits = [];
-  for (const item of wl.items) {
+  for (const item of WL.items) {
     const s = seriesOf[item.id];
     if (!s.length) continue;
     const best = s[s.length - 1].best;
     if (item.targetPrice != null && best.price <= item.targetPrice) dealHits.push({item, best});
   }
-  if (dealHits.length) {
-    document.getElementById("deals").innerHTML = `
-      <div class="deals-banner">
-        <h2>🎯 At or below target</h2>
-        ${dealHits.map(d => `
-          <div class="deal-row">
-            <div>
-              <div class="deal-name">${d.item.name}</div>
-              <div class="deal-src">${d.best.source}${d.best.note ? " · " + d.best.note : ""}</div>
-            </div>
-            <a href="${d.best.url || "#"}" target="_blank">${fmt(d.best.price)} →</a>
-          </div>`).join("")}
-      </div>`;
-  }
+  document.getElementById("deals").innerHTML = dealHits.length ? `
+    <div class="deals-banner">
+      <h2>🎯 At or below target</h2>
+      ${dealHits.map(d => `
+        <div class="deal-row">
+          <div>
+            <div class="deal-name">${d.item.name}</div>
+            <div class="deal-src">${d.best.source}${d.best.note ? " · " + d.best.note : ""}</div>
+          </div>
+          <a href="${d.best.url || "#"}" target="_blank">${fmt(d.best.price)} →</a>
+        </div>`).join("")}
+    </div>` : "";
 
-  // Group items
-  const groups = {};
-  for (const item of wl.items) {
-    const g = item.group || "Other";
-    (groups[g] = groups[g] || []).push(item);
-  }
+  const collapsed = new Set(store.get("pw-collapsed", []));
+  const {sections} = orderedSections();
 
-  const content = document.getElementById("content");
-
-  for (const [gname, items] of Object.entries(groups)) {
+  for (const sec of sections) {
     const section = document.createElement("div");
-    section.className = "group";
+    section.className = "group" + (collapsed.has(sec.key) ? " collapsed" : "");
+    section.dataset.group = sec.group;
     content.appendChild(section);
 
     section.innerHTML = `
       <div class="group-head">
-        <div class="group-title">${gname}</div>
-        <div class="group-hint">${items.length} item${items.length === 1 ? "" : "s"}</div>
+        <div class="group-title">${sec.title}</div>
+        <div class="group-hint">${sec.items.length} item${sec.items.length === 1 ? "" : "s"}</div>
+        <button class="gbtn up" title="Move up">▲</button>
+        <button class="gbtn down" title="Move down">▼</button>
+        <button class="gbtn tog" title="Collapse/expand"><span class="chev">▼</span></button>
       </div>
-      <div class="chart-wrap"><canvas></canvas></div>
-      <div class="legend"></div>`;
+      <div class="group-body">
+        <div class="chart-wrap"><canvas></canvas></div>
+        <div class="legend"></div>
+      </div>`;
 
-    // Shared x-axis: union of all dates in this group
+    // Collapse
+    const toggle = () => {
+      section.classList.toggle("collapsed");
+      const c = new Set(store.get("pw-collapsed", []));
+      section.classList.contains("collapsed") ? c.add(sec.key) : c.delete(sec.key);
+      store.set("pw-collapsed", [...c]);
+    };
+    section.querySelector(".tog").addEventListener("click", e => { e.stopPropagation(); toggle(); });
+    section.querySelector(".group-head").addEventListener("dblclick", toggle);
+
+    // Reorder buttons (act on whole base group)
+    section.querySelector(".up").addEventListener("click", e => { e.stopPropagation(); moveGroup(sec.group, -1); });
+    section.querySelector(".down").addEventListener("click", e => { e.stopPropagation(); moveGroup(sec.group, 1); });
+
+    // Drag & drop (desktop)
+    const head = section.querySelector(".group-head");
+    head.draggable = true;
+    head.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("text/plain", sec.group);
+      section.classList.add("dragging");
+    });
+    head.addEventListener("dragend", () => section.classList.remove("dragging"));
+    section.addEventListener("dragover", e => { e.preventDefault(); section.classList.add("drag-over"); });
+    section.addEventListener("dragleave", () => section.classList.remove("drag-over"));
+    section.addEventListener("drop", e => {
+      e.preventDefault();
+      section.classList.remove("drag-over");
+      dropGroup(e.dataTransfer.getData("text/plain"), sec.group);
+    });
+
+    // Shared x-axis dates for this chart
     const dateSet = new Set();
-    items.forEach(it => seriesOf[it.id].forEach(d => dateSet.add(d.date)));
+    sec.items.forEach(it => seriesOf[it.id].forEach(d => dateSet.add(d.date)));
     const dates = [...dateSet].sort();
 
-    const datasets = items.map((item, i) => {
+    const datasets = sec.items.map((item, i) => {
       const color = PALETTE[i % PALETTE.length];
       const byDate = Object.fromEntries(seriesOf[item.id].map(d => [d.date, d.best.price]));
       return {
@@ -259,10 +347,11 @@ async function load() {
         }
       }
     });
+    charts.push(chart);
 
-    // Oversized legend with pictures + line-color indicators
+    // Oversized legend
     const legend = section.querySelector(".legend");
-    items.forEach((item, i) => {
+    sec.items.forEach((item, i) => {
       const color = PALETTE[i % PALETTE.length];
       const s = seriesOf[item.id];
       const cur = s.length ? s[s.length - 1].best : null;
@@ -299,6 +388,27 @@ async function load() {
       legend.appendChild(card);
     });
   }
+}
+
+async function load() {
+  const bust = "?t=" + Date.now();
+  [WL, HIST] = await Promise.all([
+    fetch("data/watchlist.json" + bust).then(r => r.json()),
+    fetch("data/history.json" + bust).then(r => r.json())
+  ]);
+  document.getElementById("updated").textContent =
+    "Last updated " + (WL.updated || "never") + " · " + WL.items.length + " item" + (WL.items.length === 1 ? "" : "s") + " tracked";
+
+  if (!WL.items.length) {
+    document.getElementById("content").innerHTML = `
+      <div class="empty">
+        <h2>Nothing tracked yet</h2>
+        <p>Text yourself <code>WATCH: item name, target $X</code> in Messages,
+        or tell Claude to add an item. New items appear after the next daily price check (7am).</p>
+      </div>`;
+    return;
+  }
+  render();
 }
 load().catch(e => {
   document.getElementById("content").innerHTML = `<div class="empty"><h2>Couldn't load data</h2><p>${e}</p></div>`;
