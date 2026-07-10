@@ -5,7 +5,7 @@
       "id": "lexicon-dj-essential-lifetime",
       "name": "Lexicon DJ — Essential (Lifetime)",
       "group": "Software",
-      "targetPrice": null,
+      "targetPrice": 159,
       "image": "https://www.lexicondj.com/icon-512x512.png",
       "sites": [
         {"name": "Lexicon DJ (official)", "url": "https://www.lexicondj.com/pricing"}
@@ -17,7 +17,7 @@
       "id": "lexicon-dj-ultimate-lifetime",
       "name": "Lexicon DJ — Ultimate (Lifetime)",
       "group": "Software",
-      "targetPrice": null,
+      "targetPrice": 319,
       "image": "https://www.lexicondj.com/icon-512x512.png",
       "sites": [
         {"name": "Lexicon DJ (official)", "url": "https://www.lexicondj.com/pricing"}
