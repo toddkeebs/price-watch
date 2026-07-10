@@ -24,6 +24,18 @@
       ],
       "notes": "Lifetime license. List $399. Unlimited cloud storage is a separate monthly add-on (no lifetime option).",
       "added": "2026-07-09"
+    },
+    {
+      "id": "milifortic-s117-red",
+      "name": "Milifortic S117 38mm Quartz Watch (Red Dial)",
+      "group": "Watches",
+      "targetPrice": null,
+      "image": "https://ae01.alicdn.com/kf/S2b53c7481f0741e5a81a06d7b3e35f8fo.jpg",
+      "sites": [
+        {"name": "AliExpress (Milifortic Store)", "url": "https://www.aliexpress.us/item/3256812014595292.html?pdp_ext_f=%7B%22sku_id%22%3A%2212000057755094790%22%7D"}
+      ],
+      "notes": "Sapphire glass, VD78 quartz, 100M WR, nylon strap. List $233.98; AliExpress runs frequent flash sales/coupons (e.g. $20 off $109).",
+      "added": "2026-07-09"
     }
   ]
 }

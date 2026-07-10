@@ -16,5 +16,16 @@
       ],
       "deals": []
     }
+  ],
+  "milifortic-s117-red": [
+    {
+      "date": "2026-07-09",
+      "prices": [
+        {"source": "AliExpress (Milifortic Store)", "price": 114.65, "url": "https://www.aliexpress.us/item/3256812014595292.html?pdp_ext_f=%7B%22sku_id%22%3A%2212000057755094790%22%7D"}
+      ],
+      "deals": [
+        {"source": "AliExpress coupon", "price": 94.65, "url": "https://www.aliexpress.us/item/3256812014595292.html", "note": "$20 off $109 store coupon applied to $114.65"}
+      ]
+    }
   ]
 }
