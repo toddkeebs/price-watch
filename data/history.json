@@ -27,5 +27,16 @@
         {"source": "AliExpress coupon", "price": 94.65, "url": "https://www.aliexpress.us/item/3256812014595292.html", "note": "$20 off $109 store coupon applied to $114.65"}
       ]
     }
+  ],
+  "cadisen-ti7-multisync-blue": [
+    {
+      "date": "2026-07-09",
+      "prices": [
+        {"source": "AliExpress (Cadisen Official)", "price": 107.09, "url": "https://www.aliexpress.us/item/3256812049191517.html?pdp_ext_f=%7B%22sku_id%22%3A%2212000057818693874%22%7D"}
+      ],
+      "deals": [
+        {"source": "AliExpress coupon", "price": 99.09, "url": "https://www.aliexpress.us/item/3256812049191517.html", "note": "$8 off $80 store coupon applied to $107.09"}
+      ]
+    }
   ]
 }
