@@ -76,7 +76,12 @@
     flex-shrink: 0;
   }
   .gbtn:hover { color: var(--text); border-color: #3a4152; }
-  .chev { transition: transform 0.2s; }
+  .gbtn.tog {
+    background: transparent; border: none; font-size: 18px;
+    width: 24px; height: 24px; margin-right: 2px; color: var(--muted);
+  }
+  .gbtn.tog:hover { color: var(--text); }
+  .chev { display: inline-block; transition: transform 0.2s; }
   .group.collapsed .chev { transform: rotate(-90deg); }
   .group-body { }
   .group.collapsed .group-body { display: none; }
@@ -268,11 +273,11 @@ function render() {
 
     section.innerHTML = `
       <div class="group-head">
+        <button class="gbtn tog" title="Collapse/expand"><span class="chev">▾</span></button>
         <div class="group-title">${sec.title}</div>
         <div class="group-hint">${sec.items.length} item${sec.items.length === 1 ? "" : "s"}</div>
         <button class="gbtn up" title="Move up">▲</button>
         <button class="gbtn down" title="Move down">▼</button>
-        <button class="gbtn tog" title="Collapse/expand"><span class="chev">▼</span></button>
       </div>
       <div class="group-body">
         <div class="chart-wrap"><canvas></canvas></div>
