@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Price Watch</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #181b24;
+    --card2: #1f2330;
+    --text: #e8eaf0;
+    --muted: #8b90a0;
+    --accent: #4f8ef7;
+    --green: #34c77b;
+    --red: #e5534b;
+    --amber: #e8a33d;
+    --border: #2a2f3d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding-bottom: 60px;
+  }
+  header {
+    padding: 24px 20px 12px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  header h1 span { color: var(--accent); }
+  .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+  .deals-banner {
+    background: linear-gradient(135deg, #14351f, #10281a);
+    border: 1px solid #1f5c36;
+    border-radius: 14px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .deals-banner h2 { font-size: 15px; color: var(--green); margin-bottom: 10px; }
+  .deal-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-top: 1px solid #1f4630; gap: 10px;
+  }
+  .deal-row:first-of-type { border-top: none; }
+  .deal-row a { color: var(--green); font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .deal-name { font-size: 14px; }
+  .deal-src { color: var(--muted); font-size: 12px; }
+
+  .group-title {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--muted); margin: 28px 4px 12px; font-weight: 600;
+  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .card-top { display: flex; gap: 14px; padding: 14px 14px 0; }
+  .thumb {
+    width: 84px; height: 84px; border-radius: 12px; flex-shrink: 0;
+    background: var(--card2); object-fit: contain; padding: 6px;
+  }
+  .thumb-ph {
+    width: 84px; height: 84px; border-radius: 12px; flex-shrink: 0;
+    background: var(--card2); display: flex; align-items: center; justify-content: center;
+    font-size: 30px; color: var(--muted);
+  }
+  .card-info { flex: 1; min-width: 0; }
+  .item-name { font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .price-line { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .cur-price { font-size: 24px; font-weight: 700; }
+  .cur-price.below { color: var(--green); }
+  .delta { font-size: 12px; font-weight: 600; }
+  .delta.down { color: var(--green); }
+  .delta.up { color: var(--red); }
+  .target { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .target b { color: var(--amber); font-weight: 600; }
+  .badge {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 3px 8px; border-radius: 20px; margin-top: 6px;
+  }
+  .badge.hit { background: #14351f; color: var(--green); border: 1px solid #1f5c36; }
+  .badge.low { background: #33270f; color: var(--amber); border: 1px solid #5c471f; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--border); margin: 14px 14px 0;
+    border-radius: 10px; overflow: hidden; border: 1px solid var(--border);
+  }
+  .stat { background: var(--card2); padding: 8px 4px; text-align: center; }
+  .stat .v { font-size: 13px; font-weight: 600; }
+  .stat .l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  .chart-wrap { padding: 10px 14px 8px; height: 150px; }
+  .sources { padding: 0 14px 14px; font-size: 12px; color: var(--muted); }
+  .sources a { color: var(--accent); text-decoration: none; }
+  .sources .src-line { margin-top: 4px; display: flex; justify-content: space-between; }
+
+  .empty {
+    text-align: center; padding: 70px 24px; color: var(--muted);
+    background: var(--card); border: 1px dashed var(--border); border-radius: 16px; margin-top: 24px;
+  }
+  .empty h2 { color: var(--text); font-size: 18px; margin-bottom: 12px; }
+  .empty p { font-size: 14px; line-height: 1.7; max-width: 460px; margin: 0 auto; }
+  .empty code {
+    background: var(--card2); padding: 2px 8px; border-radius: 6px;
+    color: var(--amber); font-size: 13px;
+  }
+  footer { text-align: center; color: var(--muted); font-size: 11px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Price <span>Watch</span></h1>
+  <div class="sub" id="updated">Loading…</div>
+</header>
+<main>
+  <div id="deals"></div>
+  <div id="content"></div>
+</main>
+<footer>Add items: text yourself “WATCH: item name, target $X” — picked up at the next daily check.</footer>
+
+<script>
+const fmt = n => n == null ? "—" : "$" + n.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+function dailyBest(day) {
+  const all = [...(day.prices || []), ...(day.deals || [])].filter(p => p.price != null);
+  if (!all.length) return null;
+  return all.reduce((a, b) => a.price <= b.price ? a : b);
+}
+
+async function load() {
+  const bust = "?t=" + Date.now();
+  const [wl, hist] = await Promise.all([
+    fetch("data/watchlist.json" + bust).then(r => r.json()),
+    fetch("data/history.json" + bust).then(r => r.json())
+  ]);
+  document.getElementById("updated").textContent =
+    "Last updated " + (wl.updated || "never") + " · " + wl.items.length + " item" + (wl.items.length === 1 ? "" : "s") + " tracked";
+
+  if (!wl.items.length) {
+    document.getElementById("content").innerHTML = `
+      <div class="empty">
+        <h2>Nothing tracked yet</h2>
+        <p>Text yourself <code>WATCH: item name, target $X</code> in Messages,
+        or tell Claude to add an item. New items appear here after the next daily price check (7am).</p>
+      </div>`;
+    return;
+  }
+
+  // Today's deals (below target)
+  const dealHits = [];
+  for (const item of wl.items) {
+    const h = hist[item.id] || [];
+    if (!h.length) continue;
+    const best = dailyBest(h[h.length - 1]);
+    if (best && item.targetPrice != null && best.price <= item.targetPrice) {
+      dealHits.push({item, best});
+    }
+  }
+  if (dealHits.length) {
+    document.getElementById("deals").innerHTML = `
+      <div class="deals-banner">
+        <h2>🎯 At or below target</h2>
+        ${dealHits.map(d => `
+          <div class="deal-row">
+            <div>
+              <div class="deal-name">${d.item.name}</div>
+              <div class="deal-src">${d.best.source}${d.best.note ? " · " + d.best.note : ""}</div>
+            </div>
+            <a href="${d.best.url || "#"}" target="_blank">${fmt(d.best.price)} →</a>
+          </div>`).join("")}
+      </div>`;
+  }
+
+  // Groups
+  const groups = {};
+  for (const item of wl.items) {
+    const g = item.group || "Other";
+    (groups[g] = groups[g] || []).push(item);
+  }
+
+  const content = document.getElementById("content");
+  for (const [gname, items] of Object.entries(groups)) {
+    const title = document.createElement("div");
+    title.className = "group-title";
+    title.textContent = gname;
+    content.appendChild(title);
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    content.appendChild(grid);
+
+    for (const item of items) {
+      const h = hist[item.id] || [];
+      const series = h.map(d => ({date: d.date, best: dailyBest(d)})).filter(d => d.best);
+      const latest = series.length ? series[series.length - 1] : null;
+      const prev = series.length > 1 ? series[series.length - 2] : null;
+      const prices = series.map(d => d.best.price);
+      const min = prices.length ? Math.min(...prices) : null;
+      const max = prices.length ? Math.max(...prices) : null;
+      const avg = prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : null;
+      const cur = latest ? latest.best.price : null;
+      const belowTarget = cur != null && item.targetPrice != null && cur <= item.targetPrice;
+      const atLow = cur != null && min != null && cur <= min && prices.length > 1;
+
+      let deltaHtml = "";
+      if (prev && latest) {
+        const diff = latest.best.price - prev.best.price;
+        if (Math.abs(diff) >= 0.01) {
+          deltaHtml = `<span class="delta ${diff < 0 ? "down" : "up"}">${diff < 0 ? "▼" : "▲"} ${fmt(Math.abs(diff))}</span>`;
+        }
+      }
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="card-top">
+          ${item.image ? `<img class="thumb" src="${item.image}" alt="" onerror="this.outerHTML='<div class=thumb-ph>📦</div>'">` : `<div class="thumb-ph">📦</div>`}
+          <div class="card-info">
+            <div class="item-name">${item.name}</div>
+            <div class="price-line">
+              <span class="cur-price ${belowTarget ? "below" : ""}">${fmt(cur)}</span>
+              ${deltaHtml}
+            </div>
+            <div class="target">${item.targetPrice != null ? `target <b>${fmt(item.targetPrice)}</b>` : "no target set"}${latest ? ` · best at ${latest.best.source}` : ""}</div>
+            ${belowTarget ? `<span class="badge hit">BELOW TARGET</span>` : atLow ? `<span class="badge low">ALL-TIME LOW</span>` : ""}
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="v">${fmt(min)}</div><div class="l">Low</div></div>
+          <div class="stat"><div class="v">${fmt(max)}</div><div class="l">High</div></div>
+          <div class="stat"><div class="v">${fmt(avg)}</div><div class="l">Avg</div></div>
+          <div class="stat"><div class="v">${cur != null && avg ? (((cur - avg) / avg * 100).toFixed(1) + "%") : "—"}</div><div class="l">vs Avg</div></div>
+        </div>
+        <div class="chart-wrap"><canvas></canvas></div>
+        <div class="sources">
+          ${latest ? (latest.best.url ? `<a href="${latest.best.url}" target="_blank">View current best price →</a>` : "") : "No price data yet — first check runs at 7am."}
+          ${(h.length ? (h[h.length-1].prices || []) : []).map(p =>
+            `<div class="src-line"><span>${p.source}</span><span>${fmt(p.price)}</span></div>`).join("")}
+        </div>`;
+      grid.appendChild(card);
+
+      if (series.length) {
+        const ctx = card.querySelector("canvas").getContext("2d");
+        const dsets = [{
+          label: "Best price",
+          data: series.map(d => ({x: d.date, y: d.best.price})),
+          borderColor: "#4f8ef7",
+          backgroundColor: "rgba(79,142,247,0.12)",
+          fill: true, tension: 0.3, pointRadius: series.length > 30 ? 0 : 3,
+          pointBackgroundColor: "#4f8ef7", borderWidth: 2
+        }];
+        if (item.targetPrice != null) {
+          dsets.push({
+            label: "Target",
+            data: series.map(d => ({x: d.date, y: item.targetPrice})),
+            borderColor: "#e8a33d", borderDash: [5, 5], pointRadius: 0, borderWidth: 1.5, fill: false
+          });
+        }
+        new Chart(ctx, {
+          type: "line",
+          data: {datasets: dsets},
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {legend: {display: false}, tooltip: {callbacks: {label: c => fmt(c.parsed.y)}}},
+            scales: {
+              x: {type: "category", labels: series.map(d => d.date.slice(5)), ticks: {color: "#8b90a0", maxTicksLimit: 6, font: {size: 10}}, grid: {display: false}},
+              y: {ticks: {color: "#8b90a0", font: {size: 10}, callback: v => "$" + v}, grid: {color: "#2a2f3d"}}
+            }
+          }
+        });
+      }
+    }
+  }
+}
+load().catch(e => {
+  document.getElementById("content").innerHTML = `<div class="empty"><h2>Couldn't load data</h2><p>${e}</p></div>`;
+});
+</script>
+</body>
+</html>
