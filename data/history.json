@@ -21,6 +21,17 @@
         }
       ],
       "deals": []
+    },
+    {
+      "date": "2026-07-14",
+      "prices": [
+        {
+          "source": "Lexicon DJ (official)",
+          "price": 199,
+          "url": "https://www.lexicondj.com/pricing"
+        }
+      ],
+      "deals": []
     }
   ],
   "lexicon-dj-ultimate-lifetime": [
@@ -41,6 +52,17 @@
         {
           "source": "Lexicon DJ (official)",
           "price": 399.0,
+          "url": "https://www.lexicondj.com/pricing"
+        }
+      ],
+      "deals": []
+    },
+    {
+      "date": "2026-07-14",
+      "prices": [
+        {
+          "source": "Lexicon DJ (official)",
+          "price": 399,
           "url": "https://www.lexicondj.com/pricing"
         }
       ],
@@ -77,6 +99,17 @@
           "note": "Red dial in stock at manufacturer store; AliExpress listing price not retrievable today"
         }
       ]
+    },
+    {
+      "date": "2026-07-14",
+      "prices": [
+        {
+          "source": "Milifortic official site",
+          "price": 115,
+          "url": "https://miliforticwatch.com/products/mf-colored-california-dial-38mm-vd78-quartz-summer-style-watches-s117"
+        }
+      ],
+      "deals": []
     }
   ],
   "cadisen-ti7-multisync-blue": [
@@ -109,6 +142,11 @@
           "note": "Midnight Blue Multisync at manufacturer store; AliExpress listing price not retrievable today"
         }
       ]
+    },
+    {
+      "date": "2026-07-14",
+      "prices": [],
+      "deals": []
     }
   ]
 }
