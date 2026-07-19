@@ -1,9 +1,9 @@
 {
-  "updated": "2026-07-18",
+  "updated": "2026-07-19",
   "items": [
     {
       "id": "lexicon-dj-essential-lifetime",
-      "name": "Lexicon DJ \u2014 Essential (Lifetime)",
+      "name": "Lexicon DJ — Essential (Lifetime)",
       "group": "Software",
       "targetPrice": 159,
       "image": "https://www.lexicondj.com/icon-512x512.png",
@@ -18,7 +18,7 @@
     },
     {
       "id": "lexicon-dj-ultimate-lifetime",
-      "name": "Lexicon DJ \u2014 Ultimate (Lifetime)",
+      "name": "Lexicon DJ — Ultimate (Lifetime)",
       "group": "Software",
       "targetPrice": 319,
       "image": "https://www.lexicondj.com/icon-512x512.png",
