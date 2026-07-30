@@ -211,6 +211,24 @@
           "note": "20% off lifetime plans reported by coupon aggregators; list price still shown on pricing page"
         }
       ]
+    },
+    {
+      "date": "2026-07-30",
+      "prices": [
+        {
+          "source": "Lexicon DJ (official)",
+          "price": 199,
+          "url": "https://www.lexicondj.com/pricing"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Lexicon DJ promo (reported)",
+          "price": 159.2,
+          "url": "https://www.lexicondj.com/pricing",
+          "note": "20% off lifetime plans reported by coupon aggregators (July 2026); verify at checkout"
+        }
+      ]
     }
   ],
   "lexicon-dj-ultimate-lifetime": [
@@ -425,6 +443,24 @@
           "note": "20% off lifetime plans reported by coupon aggregators; list price still shown on pricing page"
         }
       ]
+    },
+    {
+      "date": "2026-07-30",
+      "prices": [
+        {
+          "source": "Lexicon DJ (official)",
+          "price": 399,
+          "url": "https://www.lexicondj.com/pricing"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Lexicon DJ promo (reported)",
+          "price": 319.2,
+          "url": "https://www.lexicondj.com/pricing",
+          "note": "20% off lifetime plans reported by coupon aggregators (July 2026); verify at checkout"
+        }
+      ]
     }
   ],
   "milifortic-s117-red": [
@@ -632,6 +668,17 @@
     },
     {
       "date": "2026-07-29",
+      "prices": [
+        {
+          "source": "Milifortic official site",
+          "price": 115,
+          "url": "https://miliforticwatch.com/products/mf-colored-california-dial-38mm-vd78-quartz-summer-style-watches-s117"
+        }
+      ],
+      "deals": []
+    },
+    {
+      "date": "2026-07-30",
       "prices": [
         {
           "source": "Milifortic official site",
@@ -890,6 +937,24 @@
           "price": 107.99,
           "url": "https://cadisen.cn/products/cadisen-titanium-ti-7-multisync-midnight-blue",
           "note": "10% off when buying 2 watches with code 2OFF"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-30",
+      "prices": [
+        {
+          "source": "Cadisen official (cadisen.cn)",
+          "price": 119.99,
+          "url": "https://cadisen.cn/products/cadisen-titanium-ti-7-multisync-midnight-blue"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Cadisen official (cadisen.cn)",
+          "price": 107.99,
+          "url": "https://cadisen.cn/products/cadisen-titanium-ti-7-multisync-midnight-blue",
+          "note": "code 2OFF: 10% off when buying 2 (sitewide promo)"
         }
       ]
     }
