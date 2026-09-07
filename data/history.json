@@ -913,6 +913,24 @@
           "note": "20% off lifetime promo advertised on pricing page (applied at checkout)"
         }
       ]
+    },
+    {
+      "date": "2026-09-07",
+      "prices": [
+        {
+          "source": "Lexicon DJ (official)",
+          "price": 199,
+          "url": "https://www.lexicondj.com/pricing"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Lexicon DJ promo",
+          "price": 159.2,
+          "url": "https://www.lexicondj.com/pricing",
+          "note": "20% off lifetime promo still advertised site-wide (applied at checkout)"
+        }
+      ]
     }
   ],
   "lexicon-dj-ultimate-lifetime": [
@@ -1827,6 +1845,24 @@
           "price": 319.2,
           "url": "https://www.lexicondj.com/pricing",
           "note": "20% off lifetime promo advertised on pricing page (applied at checkout)"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "prices": [
+        {
+          "source": "Lexicon DJ (official)",
+          "price": 399,
+          "url": "https://www.lexicondj.com/pricing"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Lexicon DJ promo",
+          "price": 319.2,
+          "url": "https://www.lexicondj.com/pricing",
+          "note": "20% off lifetime promo still advertised site-wide (applied at checkout)"
         }
       ]
     }
@@ -2749,6 +2785,24 @@
           "note": "$10 off storewide, min order $100, verified"
         }
       ]
+    },
+    {
+      "date": "2026-09-07",
+      "prices": [
+        {
+          "source": "Milifortic official site",
+          "price": 115,
+          "url": "https://miliforticwatch.com/products/mf-colored-california-dial-38mm-vd78-quartz-summer-style-watches-s117"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Milifortic (SimplyCodes)",
+          "price": 95,
+          "url": "https://simplycodes.com/store/miliforticwatch.com",
+          "note": "$20 off storewide code, no minimum (5 verified codes as of Sep 2026). Note: official site shows all S117 colors sold out today; AliExpress listing not fetchable (bot-blocked)"
+        }
+      ]
     }
   ],
   "cadisen-ti7-multisync-blue": [
@@ -3526,6 +3580,24 @@
           "price": 116.99,
           "url": "https://cadisen.cn/",
           "note": "BUY 2 ENJOY 10% OFF with code 2OFF + free shipping (per-unit price, requires 2 items)"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "prices": [
+        {
+          "source": "Cadisen official (cadisen.cn)",
+          "price": 129.99,
+          "url": "https://cadisen.cn/products/cadisen-titanium-ti-7-multisync-midnight-blue"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Cadisen site promo",
+          "price": 116.99,
+          "url": "https://cadisen.cn/",
+          "note": "BUY 2 ENJOY 10% OFF with code 2OFF + free shipping (per-unit price, requires 2 items). AliExpress/Amazon listings not fetchable (bot-blocked)"
         }
       ]
     }
