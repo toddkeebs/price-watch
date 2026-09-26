@@ -1255,6 +1255,24 @@
           "note": "Code LIBRARY2026 = 20% off lifetime at checkout, valid until Oct 9"
         }
       ]
+    },
+    {
+      "date": "2026-09-26",
+      "prices": [
+        {
+          "source": "Lexicon DJ (official)",
+          "price": 249,
+          "url": "https://www.lexicondj.com/pricing"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Lexicon DJ promo",
+          "price": 199.2,
+          "url": "https://www.lexicondj.com/pricing",
+          "note": "Code LIBRARY2026 = 20% off lifetime at checkout, valid until Oct 9"
+        }
+      ]
     }
   ],
   "lexicon-dj-ultimate-lifetime": [
@@ -2498,6 +2516,24 @@
     },
     {
       "date": "2026-09-25",
+      "prices": [
+        {
+          "source": "Lexicon DJ (official)",
+          "price": 499,
+          "url": "https://www.lexicondj.com/pricing"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Lexicon DJ promo",
+          "price": 399.2,
+          "url": "https://www.lexicondj.com/pricing",
+          "note": "Code LIBRARY2026 = 20% off lifetime at checkout, valid until Oct 9"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-26",
       "prices": [
         {
           "source": "Lexicon DJ (official)",
@@ -3799,6 +3835,30 @@
           "note": "Code 15MFS117 = $15 off S117; item currently sold out"
         }
       ]
+    },
+    {
+      "date": "2026-09-26",
+      "prices": [
+        {
+          "source": "Milifortic official site",
+          "price": 115,
+          "url": "https://miliforticwatch.com/products/mf-colored-california-dial-38mm-vd78-quartz-summer-style-watches-s117"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Milifortic (SimplyCodes)",
+          "price": 95,
+          "url": "https://simplycodes.com/store/miliforticwatch.com",
+          "note": "$20 off storewide code (verified; SimplyCodes Sep 2026 listing). Official site still shows all S117 colors sold out"
+        },
+        {
+          "source": "Milifortic blog code",
+          "price": 100,
+          "url": "https://miliforticwatch.com/blogs/our-blog/best-affordable-bauhaus-inspired-watches-in-2026",
+          "note": "Code 15MFS117 = $15 off S117; item currently sold out"
+        }
+      ]
     }
   ],
   "cadisen-ti7-multisync-blue": [
@@ -4891,6 +4951,24 @@
     },
     {
       "date": "2026-09-25",
+      "prices": [
+        {
+          "source": "Cadisen official (cadisen.cn)",
+          "price": 129.99,
+          "url": "https://cadisen.cn/products/cadisen-titanium-ti-7-multisync-midnight-blue"
+        }
+      ],
+      "deals": [
+        {
+          "source": "Cadisen site promo",
+          "price": 116.99,
+          "url": "https://cadisen.cn/",
+          "note": "BUY 2 ENJOY 10% OFF with code 2OFF + free shipping (per-unit price, requires 2 items)"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-26",
       "prices": [
         {
           "source": "Cadisen official (cadisen.cn)",
